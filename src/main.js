@@ -517,18 +517,34 @@ class MiniGraphCard extends LitElement {
     if (!this.config.show.labels || this.primaryYaxisSeries.length === 0) return;
     return html`
       <div class="graph__labels --primary flex">
-        <span class="label--max">${this.computeState(this.bound[1])}</span>
-        <span class="label--min">${this.computeState(this.bound[0])}</span>
+        <span class="label--max">${this.computeState(this.bound[1])} ${this.renderLabelsUom()}</span>
+        <span class="label--min">${this.computeState(this.bound[0])} ${this.renderLabelsUom()}</span>
       </div>
     `;
+  }
+
+  renderLabelsUom() {
+    if (this.config.label_unit === 'match') {
+      return this.entity[this.primaryYaxisEntities[0].index].attributes.unit_of_measurement;
+    } else {
+      return this.config.label_unit;
+    }
+  }
+
+  renderLabelsUomSecondary() {
+    if (this.config.label_unit_secondary === 'match') {
+      return this.entity[this.secondaryYaxisEntities[0].index].attributes.unit_of_measurement;
+    } else {
+      return this.config.label_unit_secondary;
+    }
   }
 
   renderLabelsSecondary() {
     if (!this.config.show.labels_secondary || this.secondaryYaxisSeries.length === 0) return;
     return html`
       <div class="graph__labels --secondary flex">
-        <span class="label--max">${this.computeState(this.boundSecondary[1])}</span>
-        <span class="label--min">${this.computeState(this.boundSecondary[0])}</span>
+        <span class="label--max">${this.computeState(this.boundSecondary[1])} ${this.renderLabelsUomSecondary()}</span>
+        <span class="label--min">${this.computeState(this.boundSecondary[0])} ${this.renderLabelsUomSecondary()}</span>
       </div>
     `;
   }

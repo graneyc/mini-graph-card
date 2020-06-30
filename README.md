@@ -70,6 +70,8 @@ This card is available in [HACS](https://github.com/custom-components/hacs/issue
 | icon | string |  | v0.0.1 | Set a custom icon from any of the available mdi icons.
 | name | string |  | v0.0.1 | Set a custom name which is displayed beside the icon.
 | unit | string |  | v0.0.1 | Set a custom unit of measurement.
+| label_unit | string | | v0.9.4 | set a unit to show on primary y-axis label. set to 'match' to use the default unit-of-measure for the first entity on the primary axis
+| label_unit_secondary | string | | v0.9.4 | set a unit to show on secondary y-axis label. Set to 'match' to use the default unit-of-measure for the first entity on the secondary axis
 | tap_action | [action object](#action-object-options) |  | v0.7.0 | Action on click/tap.
 | group | boolean | `false` | v0.2.0 | Disable paddings and box-shadow, useful when nesting the card.
 | hours_to_show | integer | `24` | v0.0.2 | Specify how many hours of history the graph should present.
