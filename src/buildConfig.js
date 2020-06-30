@@ -53,6 +53,7 @@ export default (config) => {
     cache: true,
     label_unit: '',
     label_unit_secondary: '',
+    value_factor: 0,
     tap_action: {
       action: 'more-info',
     },

@@ -9,7 +9,8 @@ The card works with entities from within the **sensor** domain and displays the 
 
 ### HACS
 
-This card is available in [HACS](https://github.com/custom-components/hacs/issues) (Home Assistant Community Store).
+This card is available in [HACS](https://hacs.xyz/) (Home Assistant Community Store).  
+HACS is a 3rd party Community Store, NOT the one you can already find under "Supervisor" in Home Assistant! You can find more info about it with the link above.
 
 ### Manual install
 
@@ -76,7 +77,7 @@ This card is available in [HACS](https://github.com/custom-components/hacs/issue
 | group | boolean | `false` | v0.2.0 | Disable paddings and box-shadow, useful when nesting the card.
 | hours_to_show | integer | `24` | v0.0.2 | Specify how many hours of history the graph should present.
 | points_per_hour | number | `0.5` | v0.2.0 | Specify amount of data points the graph should display for each hour, *(basically the detail/accuracy/smoothing of the graph)*.
-| aggregate_func | string | `avg` | v0.8.0 | Specify aggregate function used to calculate point/bar in the graph, `avg`, `min`, `max`, `first`, `last`, `sum`.
+| aggregate_func | string | `avg` | v0.8.0 | Specify [aggregate function](#aggregate-functions) used to calculate point/bar in the graph.
 | group_by | string | `interval` | v0.8.0 | Specify type of grouping of data, dynamic `interval`, `date` or `hour`.
 | update_interval | number |  | v0.4.0 | Specify a custom update interval of the history data (in seconds), instead of on every state change.
 | cache | boolean | `true` | v0.9.0 | Enable/disable local caching of history data.
@@ -95,12 +96,13 @@ This card is available in [HACS](https://github.com/custom-components/hacs/issue
 | align_header | string | `default` | v0.2.0 | Set the alignment of the header, `left`, `right`, `center` or `default`.
 | align_icon | string | `right` | v0.2.0 | Set the alignment of the icon, `left`, `right` or `state`.
 | align_state | string | `left` | v0.2.0 | Set the alignment of the current state, `left`, `right` or `center`.
-| lower_bound | number |  | v0.2.3 | Set a fixed lower bound for the graph Y-axis.
-| upper_bound | number |  | v0.2.3 | Set a fixed upper bound for the graph Y-axis.
-| lower_bound_secondary | number |  | v0.5.0 | Set a fixed lower bound for the graph secondary Y-axis.
-| upper_bound_secondary | number |  | v0.5.0 | Set a fixed upper bound for the graph secondary Y-axis.
+| lower_bound | number *or* string |  | v0.2.3 | Set a fixed lower bound for the graph Y-axis. String value starting with ~ (e.g. `~50`) specifies soft bound.
+| upper_bound | number *or* string |  | v0.2.3 | Set a fixed upper bound for the graph Y-axis. String value starting with ~ (e.g. `~50`) specifies soft bound.
+| lower_bound_secondary | number *or* string |  | v0.5.0 | Set a fixed lower bound for the graph secondary Y-axis. String value starting with ~ (e.g. `~50`) specifies soft bound.
+| upper_bound_secondary | number *or* string |  | v0.5.0 | Set a fixed upper bound for the graph secondary Y-axis. String value starting with ~ (e.g. `~50`) specifies soft bound.
 | smoothing | boolean | `true` | v0.8.0 | Whether to make graph line smooth.
 | state_map | [state map object](#state-map-object) |  | v0.8.0 | List of entity states to convert (order matters as position becomes a value on the graph).
+| value_factor | number | 0 | vX.X.X | Scale value by order of magnitude (e.g. convert Watts to kilo Watts), use negative value to scale down. 
 
 #### Entities object
 Entities may be listed directly (as per `sensor.temperature` in the example below), or defined using
@@ -117,7 +119,7 @@ properties of the Entity object detailed in the following table (as per `sensor.
 | show_indicator | boolean |  | Display a color indicator next to the state, (only when more than two states are visible).
 | show_graph | boolean |  | Set to false to completely hide the entity in the graph.
 | show_line | boolean |  | Set to false to hide the line.
-| show_fill | boolean |  | Set to false to hide the fill).
+| show_fill | boolean |  | Set to false to hide the fill.
 | show_points | boolean |  | Set to false to hide the points.
 | show_legend | boolean |  | Set to false to turn hide from the legend.
 | state_adaptive_color | boolean |  | Make the color of the state adapt to the entity color.
@@ -177,11 +179,24 @@ See [dynamic line color](#dynamic-line-color) for example usage.
 | value ***(required)*** | string |  | Value to convert.
 | label | string | same as value | String to show as label (if the value is not precise).
 
+### Aggregate functions
+Recorded values are grouped in time buckets which are determined by `group_by`, `points_per_hour` configuration.
+These buckets are converted later to single point/bar on the graph. Aggregate function defines the methods of that conversion.
+
+| Name | Since | Description |
+|------|:-------:|-------------|
+| `avg` | v0.8.0 | Average
+| `min` | v0.8.0 | Minimum - lowest value
+| `max` | v0.8.0 | Maximum - largest value
+| `first` | v0.9.0 |
+| `last` | v0.9.0 |
+| `sum` | v0.9.2 |
+| `delta` | v0.9.4 | Calculates difference between max and min value
 
 ### Theme variables
 The following theme variables can be set in your HA theme to customize the appearence of the card.
 
-| name | Default | Description |
+| Name | Default | Description |
 |------|:-------:|-------------|
 | mcg-title-letter-spacing |  | Letter spacing of the card title (`name` option).
 | mcg-title-font-weight | 500 | Font weight of the card title.
