@@ -54,6 +54,7 @@ export default (config) => {
     label_unit: '',
     label_unit_secondary: '',
     value_factor: 0,
+    gradient_direction: 'horizontal',
     tap_action: {
       action: 'more-info',
     },

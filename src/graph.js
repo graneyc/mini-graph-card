@@ -144,21 +144,45 @@ export default class Graph {
     return path;
   }
 
-  computeGradient(thresholds) {
+  computeGradient(thresholds, gradientDirection) {
     const scale = this._max - this._min;
-
-    return thresholds.map((stop, index, arr) => {
-      let color;
-      if (stop.value > this._max && arr[index + 1]) {
-        const factor = (this._max - arr[index + 1].value) / (stop.value - arr[index + 1].value);
-        color = interpolateColor(arr[index + 1].color, stop.color, factor);
-      } else if (stop.value < this._min && arr[index - 1]) {
-        const factor = (arr[index - 1].value - this._min) / (arr[index - 1].value - stop.value);
-        color = interpolateColor(arr[index - 1].color, stop.color, factor);
+    if (gradientDirection === 'horizontal') {
+      return thresholds.map((stop, index, arr) => {
+        let color;
+        if (stop.value > this._max && arr[index + 1]) {
+          const factor = (this._max - arr[index + 1].value) / (stop.value - arr[index + 1].value);
+          color = interpolateColor(arr[index + 1].color, stop.color, factor);
+        } else if (stop.value < this._min && arr[index - 1]) {
+          const factor = (arr[index - 1].value - this._min) / (arr[index - 1].value - stop.value);
+          color = interpolateColor(arr[index - 1].color, stop.color, factor);
+        }
+        return {
+          color: color || stop.color,
+          offset: scale <= 0 ? 0 : (this._max - stop.value) * (100 / scale),
+        };
+      });
+    }
+    // assign a threshold to all coords
+    const mappedCoords = this.coords.map(c => ({
+      ...c,
+      threshold: thresholds.find(ele => ele.value < c[V]) || thresholds[0],
+    }));
+    // find coords where thresholds change and protect for first and last items
+    const stops = mappedCoords.filter((c, i, a) => {
+      if (a[i - 1] && a[i + 1]) {
+        return c.threshold !== a[i - 1].threshold || c.threshold !== a[i + 1].threshold;
+      } else if (!a[i + 1]) {
+        return mappedCoords[mappedCoords.length - 1];
+      } else {
+        return mappedCoords[0];
       }
+    });
+    // map stops to all threshold changes
+    return stops.map((t) => {
+      const stop = t.threshold;
       return {
-        color: color || stop.color,
-        offset: scale <= 0 ? 0 : (this._max - stop.value) * (100 / scale),
+        color: stop.color,
+        offset: (t[X] / this.width) * 100,
       };
     });
   }

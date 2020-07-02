@@ -88,6 +88,7 @@ HACS is a 3rd party Community Store, NOT the one you can already find under "Sup
 | line_width | number | `5` | v0.0.1 | Set the thickness of the line.
 | line_color | string/list | `var(--accent-color)` | v0.0.1 | Set a custom color for the graph line, provide a list of colors for multiple graph entries.
 | color_thresholds | list |  | v0.2.3 | Set thresholds for dynamic graph colors, see [Line color object](#line-color-object).
+| gradient_direction | string |  | v0.9.4 | Set the direction of the gradient. 'horizontal' (default) puts the gradient on the y-axis, 'vertical' puts the gradient on the x-axis.
 | color_thresholds_transition | string | `smooth` | v0.4.3 | Color threshold transition, `smooth` or `hard`.
 | decimals | integer |  | v0.0.9 | Specify the exact number of decimals to show for states.
 | hour24 | boolean | `false` | v0.2.1 | Set to `true` to display times in 24-hour format.

@@ -403,10 +403,11 @@ class MiniGraphCard extends LitElement {
 
   renderSvgGradient(gradients) {
     if (!gradients) return;
+    const gradRotate = this.config.gradient_direction === 'horizontal' ? 90 : 0;
     const items = gradients.map((gradient, i) => {
       if (!gradient) return;
       return svg`
-        <linearGradient id=${`grad-${this.id}-${i}`} gradientTransform="rotate(90)">
+        <linearGradient id=${`grad-${this.id}-${i}`} gradientTransform="rotate(${gradRotate})">
           ${gradient.map(stop => svg`
             <stop stop-color=${stop.color} offset=${`${stop.offset}%`} />
           `)}
@@ -730,8 +731,11 @@ class MiniGraphCard extends LitElement {
           if (config.show.points && (config.entities[i].show_points !== false)) {
             this.points[i] = this.Graph[i].getPoints();
           }
-          if (config.color_thresholds.length > 0 && !config.entities[i].color)
-            this.gradient[i] = this.Graph[i].computeGradient(config.color_thresholds);
+          if (config.color_thresholds.length > 0 && !config.entities[i].color) {
+            const colorThresholds = config.color_thresholds;
+            const gradientDirection = config.gradient_direction;
+            this.gradient[i] = this.Graph[i].computeGradient(colorThresholds, gradientDirection);
+          }
         }
       });
       this.line = [...this.line];
